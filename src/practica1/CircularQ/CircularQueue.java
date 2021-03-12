@@ -7,56 +7,70 @@ public class CircularQueue<E> implements Queue<E> {
 
     private final E[] queue;
     private final int N;
-    //Completar...
+    private int pWrite; //puntero de escritura
+    private int pRead;  //puntero de lectura
+    private int numElem; //número de elementos
 
     public CircularQueue(int N) {
         this.N = N;
         queue = (E[]) (new Object[N]);
+        pWrite = 0;
+        pRead = 0;
+        numElem = 0;
     }
 
     @Override
     public int size() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return numElem;
     }
 
     @Override
     public int free() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return N-numElem;
     }
 
     @Override
     public boolean hasFree(int n) {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        if (n < 0) throw new IllegalArgumentException("Valor negativo");
+        return free() >= n;
     }
 
     @Override
     public boolean empty() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return size() == 0;
     }
 
     @Override
     public boolean full() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return numElem == N;
     }
 
     @Override
     public E peekFirst() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return queue[pRead];
     }
 
     @Override
     public E peekLast() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        if (empty()) throw new IllegalStateException("Cola vacía");
+        return queue[pWrite-1];
     }
 
     @Override
     public E get() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        pRead ++;
+        pRead = pRead % N;
+        numElem--;
+        return peekFirst();
     }
 
     @Override
     public void put(E e) {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        if (full()) throw new IllegalStateException("Cola llena");
+        queue[pWrite] = e;
+        numElem++;
+        pWrite++;
+        pWrite = pWrite%N;
     }
 
     @Override
@@ -67,16 +81,24 @@ public class CircularQueue<E> implements Queue<E> {
 
     class MyIterator implements Iterator {
 
-        //Completar...
+        private int indice = pRead; //desde donde empezamos a recorrer la cola
+        private int numIteraciones = 0; //cuenta en num de saltos que damos
 
         @Override
         public boolean hasNext() {
-            throw new RuntimeException("Aquest mètode s'ha de completar...");
+            if (empty()) throw new IllegalStateException("Cola vacía");
+            return numIteraciones < numElem;
         }
 
         @Override
         public E next() {
-            throw new RuntimeException("Aquest mètode s'ha de completar...");
+            E temp;
+            if (!hasNext()) return null;
+            numIteraciones++;
+            temp = queue[indice];
+            indice++;
+            indice = indice%N;
+            return temp;
         }
 
         @Override
