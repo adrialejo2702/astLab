@@ -5,12 +5,20 @@ import utils.Queue;
 
 public class LinkedQueue<E> implements Queue<E> {
 
-    //Completar...
+    private int numElem;
+    private Node<E> primero;
+    private Node<E> ultimo;
+
+    public LinkedQueue(){
+        numElem = 0;
+        primero = null;
+        ultimo = null;
+    }
 
 
     @Override
     public int size() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return numElem;
     }
 
     @Override
@@ -20,37 +28,56 @@ public class LinkedQueue<E> implements Queue<E> {
 
     @Override
     public boolean hasFree(int n) {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        if (n<0) throw new IllegalArgumentException("Valor negativo");
+        return true;
     }
 
     @Override
     public boolean empty() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        if (numElem == 0) return true;
+        return false;
     }
 
     @Override
     public boolean full() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return false;
     }
 
     @Override
     public E peekFirst() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return primero.getValue();
     }
 
     @Override
     public E peekLast() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        return ultimo.getValue();
     }
 
     @Override
     public E get() {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        E temp;
+        if (empty()) throw new IllegalStateException("Cola vacía");
+        numElem--;
+        temp = primero.getValue();
+        primero = primero.getNext();
+        if (empty()) ultimo = null; //caso quitamos el único elemento que hay
+        return temp;
     }
 
     @Override
     public void put(E value) {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        Node newNode = new Node();
+        newNode.setValue(value);
+
+        if (size() == 0) {
+            primero = newNode;
+        }else {
+            ultimo.setNext(newNode);
+
+        }
+        ultimo = newNode;
+        numElem++;
+
     }
 
     @Override
@@ -59,17 +86,24 @@ public class LinkedQueue<E> implements Queue<E> {
     }
 
     class MyIterator implements Iterator {
-
-        //Completar
+        private int numIteraciones = 0;
+        private Node<E> actual = primero;
 
         @Override
         public boolean hasNext() {
-            throw new RuntimeException("Aquest mètode s'ha de completar...");
+            return  numIteraciones < numElem;
         }
 
         @Override
         public E next() {
-            throw new RuntimeException("Aquest mètode s'ha de completar...");
+            E temp;
+            Node<E> auxiliar;
+            if(!hasNext()) return null;
+            temp = actual.getValue();
+            numIteraciones++;
+            auxiliar = actual;
+            actual = actual.getNext();
+            return temp;
         }
 
         @Override

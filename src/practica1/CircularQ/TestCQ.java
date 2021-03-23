@@ -20,5 +20,7 @@ public class TestCQ {
         while (iterator.hasNext())
             System.out.println(iterator.next());
 
+        System.out.println("Nuevo número de elemetos: " + cola.size());
+
     }
 }
