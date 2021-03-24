@@ -12,6 +12,13 @@ public class TSocketRecv {
     }
 
     public int receiveData(byte[] data, int offset, int length) {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        int bytesDataNum;
+        TCPSegment tcpSegmentOnChannel = channel.receive();
+        System.arraycopy(tcpSegmentOnChannel.getData(),tcpSegmentOnChannel.getDataOffset(),
+                data,offset, length);
+        bytesDataNum = length;
+        if (length > tcpSegmentOnChannel.getDataLength())
+            bytesDataNum = tcpSegmentOnChannel.getDataLength();
+        return bytesDataNum;
     }
 }

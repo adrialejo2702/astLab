@@ -12,6 +12,10 @@ public class TSocketSend {
     }
 
     public void sendData(byte[] data, int offset, int length) {
-        throw new RuntimeException("Aquest mètode s'ha de completar...");
+        byte[] dataToSend = new byte[length];
+        System.arraycopy(data, offset, dataToSend, 0, length);
+        TCPSegment tcpSegmentToSend = new TCPSegment();
+        tcpSegmentToSend.setData(dataToSend);
+        channel.send(tcpSegmentToSend);
     }
 }
