@@ -26,10 +26,12 @@ public class MonitorChannel implements Channel {
         lock.lock();
         try {
             while (cola.full()){
-                colaLlena.awaitUninterruptibly();
+                colaLlena.await();
             }
             cola.put(seg);
             colaVacia.signal();
+
+        } catch (InterruptedException exception) {
 
         } finally {
             lock.unlock();
@@ -39,15 +41,19 @@ public class MonitorChannel implements Channel {
     @Override
     public TCPSegment receive() {
         lock.lock();
+        TCPSegment toAdd = null;
 
         try {
             while (cola.empty()){
-                colaVacia.awaitUninterruptibly();
+                colaVacia.await();
             }
+            toAdd = cola.get();
             colaLlena.signal();
-            return cola.get();
+        } catch (InterruptedException exception) {
+            
         } finally{
             lock.unlock();
+            return toAdd;
         }
     }
 
