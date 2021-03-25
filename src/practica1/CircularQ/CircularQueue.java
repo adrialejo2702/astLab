@@ -58,10 +58,13 @@ public class CircularQueue<E> implements Queue<E> {
 
     @Override
     public E get() {
-        pRead ++;
+        if(empty()) throw new IllegalArgumentException("Cola vacia.");
+        E toReturn;
+        toReturn = peekFirst();
+        pRead++;
         pRead = pRead % N;
         numElem--;
-        return peekFirst();
+        return toReturn;
     }
 
     @Override
